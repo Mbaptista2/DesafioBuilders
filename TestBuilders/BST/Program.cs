@@ -1,4 +1,8 @@
-﻿using System;
+﻿using Data;
+using Data.Repository;
+using Microsoft.Extensions.Configuration;
+using System;
+using System.IO;
 
 namespace BST
 {
@@ -6,6 +10,12 @@ namespace BST
     {
         private static void Main(string[] args)
         {
+            var builder = new ConfigurationBuilder()
+            .SetBasePath(Directory.GetCurrentDirectory())
+            .AddJsonFile("appsettings.json");
+
+            var configuration = builder.Build();
+
             BinaryTree binaryTree = new();
 
             binaryTree.Add(1);
@@ -20,18 +30,18 @@ namespace BST
             NodeModel model = new();
 
             //Preparação do dado
-            model.Id = Guid.NewGuid();
+            model.Id = Guid.NewGuid().ToString();
             model.Datas = binaryTree.GetAllNodes();
 
-            Repository<NodeModel> repository = new Repository<NodeModel>(@"MyData.db");
+            NodeRepository repository = new NodeRepository(configuration["ConnectionString"], configuration["DatabaseName"]);
 
             //Persistencia
             repository.Insert(model);
 
             //recuperação
-            var teste = repository.Find(model.Id);
+            var entidadeSalva = repository.Get(model.Id);
 
-            //BinaryTree binaryTreeRecover = new(teste.Datas);
+            //BinaryTree binaryTreeRecover = new(entidadeSalva.Datas);
         }
     }
 }

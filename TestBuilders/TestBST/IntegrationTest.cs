@@ -1,16 +1,17 @@
-using BST;
+using Data.Repository;
 using TestBST._Builder;
+using TestBST.Fixture;
 using Xunit;
 
 namespace TestBST
 {
-    public class IntegrationTest
+    public class IntegrationTest : IClassFixture<DbFixture>
     {
-        private readonly Repository<NodeModel> _repository;
+        private readonly NodeRepository _repository;
 
-        public IntegrationTest()
+        public IntegrationTest(DbFixture dbFixture)
         {
-            _repository = new Repository<NodeModel>(@"test.db");
+            _repository = new NodeRepository(dbFixture.connection, dbFixture.database);
         }
 
         [Theory]
@@ -23,7 +24,7 @@ namespace TestBST
 
             _repository.Insert(model);
 
-            var result = _repository.Find(model.Id);
+            var result = _repository.Get(model.Id);
 
             Assert.NotNull(result);
             Assert.Equal(size, result.Datas.Count);

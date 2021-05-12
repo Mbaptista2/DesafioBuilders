@@ -1,5 +1,5 @@
 ﻿using Bogus;
-using BST;
+using Data;
 using System;
 using System.Collections.Generic;
 
@@ -13,7 +13,7 @@ namespace TestBST._Builder
         public static NodeModel Novo(int DataSize)
         {
             var test = new Faker<NodeModel>()
-                .RuleFor(p => p.Id, f => Guid.NewGuid())
+                .RuleFor(p => p.Id, f => Guid.NewGuid().ToString())
                 .RuleFor(p => p.Datas, f => f.Make(DataSize, () => f.Random.Int(0, 10)));
 
             return test.Generate();

@@ -6,10 +6,7 @@ namespace Data.Repository.Base
 {
     internal class Database<T> where T : IEntity
     {
-        private Database()
-        {
-        }
-
+       
         /// <summary>
         /// Creates and returns a MongoCollection from the connectionstring name and collection name
         /// </summary>
@@ -40,7 +37,7 @@ namespace Data.Repository.Base
         private static IMongoDatabase GetDatabaseFromUrl(MongoUrl url, string databaseName)
         {
             var client = new MongoClient(url);
-            return client.GetDatabase(databaseName); // WriteConcern defaulted to Acknowledged
+            return client.GetDatabase(databaseName); 
         }
     }
 }
